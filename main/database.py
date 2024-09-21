@@ -1,3 +1,4 @@
+from sqlalchemy import create_engine
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -15,18 +16,17 @@ DATABASE_NAME = os.getenv("DATABASE_NAME")
 
 # Construir la URL de la base de datos
 DATABASE_URL = (
-    f"postgresql+asyncpg://{DATABASE_USER}:{DATABASE_PASSWORD}@{DATABASE_HOST}/{DATABASE_NAME}"
+    f"postgresql://{DATABASE_USER}:{DATABASE_PASSWORD}@{DATABASE_HOST}/{DATABASE_NAME}"
 )
 
 # Crear el motor de la base de datos
-engine = create_async_engine(DATABASE_URL, echo=True)
+engine = create_engine(DATABASE_URL, echo=True)
 
 # Crear una sesión asíncrona
 SessionLocal = sessionmaker(
     autocommit=False,
     autoflush=False,
     bind=engine,
-    class_=AsyncSession
 )
 
 # Base para los modelos
