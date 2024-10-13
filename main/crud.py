@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session,joinedload
 from sqlalchemy import desc
 from . import models, schemas
 
@@ -36,7 +36,7 @@ def create_favorite_video(db: Session, video_id: int):
 
 #Eliminar un video de favoritos
 def delete_favorite_video(db: Session, id: int):
-    item = db.query(models.FavoriteVideo).filter(models.FavoriteVideo.id == id).first()
+    item = db.query(models.FavoriteVideo).filter(models.FavoriteVideo.videoID == id).first()
     
     if item is None:
         return None
@@ -51,11 +51,20 @@ def get_top_10_videos_by_views(db: Session):
 
 # Obtener los 10 videos favoritos más recientes
 def get_top_10_recent_favorite_videos(db: Session):
-    return db.query(models.FavoriteVideo).order_by(desc(models.FavoriteVideo.favoriteDate)).limit(10).all()
+    response = (
+        db.query(models.Video)
+        .join(models.FavoriteVideo, models.Video.id == models.FavoriteVideo.videoID)
+        .order_by(desc(models.FavoriteVideo.favoriteDate))
+        .limit(10)
+        .all()
+    )
+    return response
 
 # Buscar videos por título o descripción
 def search_videos(db: Session, query: str):
-    return db.query(models.Video).filter(
+    return db.query(models.Video).options(
+        joinedload(models.Video.isFavorite),  #load the isFavorite relationship
+    ).filter(
         (models.Video.title.ilike(f'%{query}%')) | 
         (models.Video.description.ilike(f'%{query}%'))
     ).all()

@@ -10,7 +10,7 @@ class Video(Base):
     #Atributos de la tabla
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, index=True, nullable=False)
-    creationDate = Column(DateTime, default=datetime.now(timezone.utc))
+    creationDate = Column(DateTime, default=lambda: datetime.now(timezone.utc))
     description = Column(String, index=True)
     videoPath = Column(String, nullable=False)
     thumbnailPath = Column(String, nullable=False)
@@ -24,7 +24,7 @@ class FavoriteVideo(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     videoID = Column(Integer, ForeignKey('videos.id'), nullable=False)
-    favoriteDate = Column(DateTime, default=datetime.now(timezone.utc))
+    favoriteDate = Column(DateTime, default=lambda: datetime.now(timezone.utc))
 
     video = relationship("Video", back_populates="isFavorite")
 
@@ -34,6 +34,6 @@ class Comment(Base):
     id = Column(Integer, primary_key=True, index=True)
     videoID = Column(Integer, ForeignKey('videos.id'), nullable=False)
     comment = Column(String, nullable=False)
-    creationDate = Column(DateTime, default=datetime.utcnow)
+    creationDate = Column(DateTime, default=datetime.now(timezone.utc))
 
     video = relationship("Video", back_populates="comments")
