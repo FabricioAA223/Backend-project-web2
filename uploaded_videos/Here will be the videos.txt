@@ -1,0 +1,1 @@
+Se agregó este archivo para que se agregue la carpeta al GitHub, ya que si está vacía no se agrega

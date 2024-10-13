@@ -17,6 +17,6 @@ CONFIGURACION DE POSTGRESQL
 
 EJECUCION
     6. Ejecutar el servidor por medio de alguna de las siguientes opciones:
-        a. Ejecutar el comando "uvicorn main:app --reload" dentro del directorio del repositorio
+        a. Ejecutar el comando "uvicorn main.main:app --reload" dentro del directorio del repositorio
         b. Abrir el archivo main.py -> Opcion "Run or Debug" de VSC -> "Python debbuger:Debbuging using launch.json"
     7. Probar el API ingresando a http://127.0.0.1:8000/docs o por medio de Postman o Thunder Client (VSC Extension)
