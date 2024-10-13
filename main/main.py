@@ -8,16 +8,9 @@ from . import crud, models, schemas
 from .database import SessionLocal, engine, Base
 from fastapi.staticfiles import StaticFiles
 
-
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
-
-# Montar la carpeta de videos en la ruta "/uploaded_videos"
-app.mount("/uploaded_videos", StaticFiles(directory="uploaded_videos"), name="uploaded_videos")
-app.mount("/thumbnails", StaticFiles(directory="thumbnails"), name="thumbnails")
-video_directory = "uploaded_videos"
-thumbnail_directory = "thumbnails"
 
 origins = ['*']
 
@@ -30,8 +23,14 @@ app.add_middleware(
 )
 
 # Crear un directorio para almacenar los archivos si no existe
-os.makedirs('videos', exist_ok=True)
+os.makedirs('uploaded_videos', exist_ok=True)
 os.makedirs('thumbnails', exist_ok=True)
+
+# Montar la carpeta de videos en la ruta "/uploaded_videos"
+app.mount("/uploaded_videos", StaticFiles(directory="uploaded_videos"), name="uploaded_videos")
+app.mount("/thumbnails", StaticFiles(directory="thumbnails"), name="thumbnails")
+video_directory = "uploaded_videos"
+thumbnail_directory = "thumbnails"
 
 # Dependencia para obtener la sesión de la base de datos
 def get_db():
